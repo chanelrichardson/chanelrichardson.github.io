@@ -12,9 +12,9 @@
   src: url('BrokenconsoleBold.otf') format('opentype');
   font-weight: bold;
 }
-
+ 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
 :root {
   --bg: #080b0a;
   --surface: #0e1412;
@@ -30,9 +30,9 @@
   --muted: #5a7a72;
   --hint: #2a3d38;
 }
-
+ 
 html { scroll-behavior: smooth; }
-
+ 
 body {
   font-family: 'DM Mono', monospace;
   background: var(--bg);
@@ -41,7 +41,7 @@ body {
   overflow-x: hidden;
   cursor: none;
 }
-
+ 
 /* Custom cursor */
 .cursor {
   position: fixed;
@@ -63,7 +63,7 @@ body {
   transition: all 0.08s ease;
   opacity: 0.5;
 }
-
+ 
 /* Three.js canvas */
 #bg-canvas {
   position: fixed;
@@ -72,30 +72,31 @@ body {
   z-index: 0;
   opacity: 0.55;
 }
-
+ 
 /* Layout */
 .site-wrap {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: 240px 1fr;
   min-height: 100vh;
 }
-
+ 
 /* Sidebar nav */
 .sidebar {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 240px;
   height: 100vh;
   padding: 40px 24px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--border);
-  background: rgba(8,11,10,0.7);
+  background: rgba(8,11,10,0.92);
   backdrop-filter: blur(12px);
   z-index: 10;
+  overflow-y: auto;
 }
-
+ 
 .sidebar-name {
   font-family: 'BrokenConsole', monospace;
   font-size: 19px;
@@ -104,7 +105,7 @@ body {
   line-height: 1.2;
   margin-bottom: 4px;
 }
-
+ 
 .sidebar-title {
   font-size: 10px;
   color: var(--muted);
@@ -113,9 +114,9 @@ body {
   margin-bottom: 40px;
   font-style: italic;
 }
-
+ 
 nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
-
+ 
 nav a {
   display: flex;
   align-items: center;
@@ -141,7 +142,7 @@ nav a .nav-dot {
   background: currentColor;
   flex-shrink: 0;
 }
-
+ 
 .sidebar-foot {
   font-size: 10px;
   color: var(--hint);
@@ -154,20 +155,21 @@ nav a .nav-dot {
   transition: color 0.15s;
 }
 .sidebar-foot a:hover { color: var(--teal); }
-
+ 
 /* Main content */
 .main {
   margin-left: 240px;
   padding: 0;
+  min-height: 100vh;
 }
-
+ 
 /* Sections */
 section {
   min-height: 100vh;
   padding: 80px 60px;
   border-bottom: 1px solid var(--border);
 }
-
+ 
 .section-eyebrow {
   font-size: 10px;
   letter-spacing: 0.2em;
@@ -176,7 +178,7 @@ section {
   margin-bottom: 16px;
   font-style: italic;
 }
-
+ 
 .section-title {
   font-family: 'BrokenConsole', monospace;
   font-size: clamp(36px, 5vw, 64px);
@@ -185,7 +187,7 @@ section {
   margin-bottom: 40px;
   color: var(--text);
 }
-
+ 
 /* Hero section */
 #home {
   display: grid;
@@ -194,9 +196,9 @@ section {
   align-items: center;
   padding-top: 100px;
 }
-
+ 
 .hero-content {}
-
+ 
 .hero-tagline {
   font-family: 'BrokenConsole', monospace;
   font-size: clamp(42px, 6vw, 80px);
@@ -206,7 +208,7 @@ section {
 }
 .hero-tagline .accent { color: var(--teal); }
 .hero-tagline .accent2 { color: var(--purple); }
-
+ 
 .hero-bio {
   font-size: 14px;
   line-height: 1.9;
@@ -214,7 +216,7 @@ section {
   max-width: 520px;
   margin-bottom: 32px;
 }
-
+ 
 .interests {
   display: flex;
   flex-wrap: wrap;
@@ -235,7 +237,7 @@ section {
   border-color: var(--teal-dim);
   color: var(--teal);
 }
-
+ 
 .hero-links { display: flex; gap: 12px; }
 .btn {
   display: inline-flex;
@@ -262,7 +264,7 @@ section {
   color: var(--muted);
 }
 .btn-ghost:hover { border-color: var(--teal-dim); color: var(--teal); }
-
+ 
 .hero-img-wrap {
   position: relative;
 }
@@ -290,7 +292,7 @@ section {
   opacity: 0.25;
   pointer-events: none;
 }
-
+ 
 /* About section */
 #about {}
 .about-grid {
@@ -318,7 +320,7 @@ section {
   color: var(--muted);
 }
 .about-block.full { grid-column: 1 / -1; }
-
+ 
 .stack-tags {
   display: flex;
   flex-wrap: wrap;
@@ -335,7 +337,7 @@ section {
   transition: all 0.15s;
 }
 .stack-tag:hover { border-color: var(--green); color: var(--green); }
-
+ 
 /* Projects */
 #projects {}
 .projects-grid {
@@ -369,7 +371,7 @@ section {
   transform: translateY(-2px);
 }
 .project-card:hover::before { opacity: 1; }
-
+ 
 .project-status {
   font-size: 10px;
   letter-spacing: 0.12em;
@@ -382,7 +384,7 @@ section {
 .status-live { background: #00e5b420; color: var(--teal); border: 1px solid var(--teal-dim); }
 .status-wip  { background: #ffb34720; color: var(--amber); border: 1px solid #ffb34760; }
 .status-concept { background: #c77dff20; color: var(--purple); border: 1px solid #c77dff60; }
-
+ 
 .project-name {
   font-family: 'BrokenConsole', monospace;
   font-size: 22px;
@@ -412,7 +414,7 @@ section {
 }
 .project-card.featured { grid-column: 1 / -1; }
 .project-card.featured .project-name { font-size: 28px; }
-
+ 
 /* TouchDesigner section */
 .td-placeholder {
   border: 1px dashed var(--border);
@@ -432,7 +434,7 @@ section {
   color: var(--purple);
   margin-bottom: 12px;
 }
-
+ 
 /* Writings */
 #writings {}
 .writing-add-hint {
@@ -489,7 +491,7 @@ section {
   color: var(--muted);
   font-style: italic;
 }
-
+ 
 /* Resume */
 #resume {}
 .resume-section { margin-bottom: 40px; }
@@ -560,7 +562,7 @@ section {
   border-radius: 4px;
   color: var(--muted);
 }
-
+ 
 /* Talks section */
 .talks-list { display: flex; flex-direction: column; gap: 12px; }
 .talk-item {
@@ -586,7 +588,7 @@ section {
 }
 .talk-title { font-size: 13px; color: var(--text); margin-bottom: 4px; }
 .talk-venue { font-size: 11px; color: var(--muted); }
-
+ 
 /* Scanline effect */
 .scanline {
   position: fixed;
@@ -602,7 +604,7 @@ section {
   z-index: 100;
   opacity: 0.4;
 }
-
+ 
 /* Scroll fade-in */
 .fade-in {
   opacity: 0;
@@ -610,7 +612,7 @@ section {
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
-
+ 
 @media (max-width: 1000px) {
   .site-wrap { grid-template-columns: 1fr; }
   .sidebar { position: relative; width: 100%; height: auto; }
@@ -624,14 +626,14 @@ section {
 </style>
 </head>
 <body>
-
+ 
 <div class="cursor" id="cursor"></div>
 <div class="cursor-trail" id="cursorTrail"></div>
 <div class="scanline"></div>
 <canvas id="bg-canvas"></canvas>
-
+ 
 <div class="site-wrap">
-
+ 
 <!-- Sidebar -->
 <aside class="sidebar">
   <div class="sidebar-name">Chanel<br>Richardson</div>
@@ -652,10 +654,10 @@ section {
     <span style="color:var(--hint)">Washington, DC</span>
   </div>
 </aside>
-
+ 
 <!-- Main -->
 <main class="main">
-
+ 
   <!-- HOME -->
   <section id="home">
     <div class="hero-content">
@@ -689,7 +691,7 @@ section {
       <div class="hero-img-frame2"></div>
     </div>
   </section>
-
+ 
   <!-- ABOUT -->
   <section id="about">
     <p class="section-eyebrow fade-in">background</p>
@@ -721,13 +723,13 @@ section {
       </div>
     </div>
   </section>
-
+ 
   <!-- PROJECTS -->
   <section id="projects">
     <p class="section-eyebrow fade-in">work</p>
     <h2 class="section-title fade-in">Projects.</h2>
     <div class="projects-grid">
-
+ 
       <!-- Featured: Job Agent -->
       <div class="project-card featured fade-in">
         <span class="project-status status-live">Live</span>
@@ -740,7 +742,7 @@ section {
           <span>Vercel</span><span>Node.js</span><span>Gmail SMTP</span>
         </div>
       </div>
-
+ 
       <!-- Court Scraper -->
       <div class="project-card fade-in">
         <span class="project-status status-wip">In Progress</span>
@@ -752,7 +754,7 @@ section {
           <span>JavaScript</span><span>Puppeteer</span><span>AWS</span><span>Civic Tech DC</span>
         </div>
       </div>
-
+ 
       <!-- Housing Re-Entry -->
       <div class="project-card fade-in">
         <span class="project-status status-wip">Early Stage</span>
@@ -764,7 +766,7 @@ section {
           <span>TBD</span><span>Early Stage</span>
         </div>
       </div>
-
+ 
       <!-- Algocade -->
       <div class="project-card fade-in">
         <span class="project-status status-concept">In Development</span>
@@ -776,7 +778,7 @@ section {
           <span>Strudel</span><span>Hydra</span><span>Live Coding</span><span>Web Audio API</span>
         </div>
       </div>
-
+ 
       <!-- GerryTools -->
       <div class="project-card fade-in">
         <a href="https://github.com/mggg/evaltools" target="_blank" style="text-decoration:none;color:inherit;display:block;">
@@ -790,7 +792,7 @@ section {
         </div>
         </a>
       </div>
-
+ 
       <!-- Jackson TN -->
       <div class="project-card fade-in">
         <span class="project-status status-live">Shipped</span>
@@ -802,10 +804,10 @@ section {
           <span>Python</span><span>GIS</span><span>Redistricting</span><span>Voting Rights</span>
         </div>
       </div>
-
+ 
     </div>
   </section>
-
+ 
   <!-- VISUALS / TOUCHDESIGNER -->
   <section id="visuals">
     <p class="section-eyebrow fade-in">generative work</p>
@@ -819,7 +821,7 @@ section {
       Each piece gets a card with a preview, title, and description.</p>
     </div>
   </section>
-
+ 
   <!-- WRITINGS -->
   <section id="writings">
     <p class="section-eyebrow fade-in">words</p>
@@ -828,7 +830,7 @@ section {
       To add an entry: duplicate a <code>&lt;a class="writing-item"&gt;</code> block below and update the title, type, date, and href. That's it.
     </div>
     <div class="writings-list">
-
+ 
       <!-- TALKS (included here as "writings") -->
       <a class="writing-item fade-in" href="https://www.youtube.com/watch?v=wGs_o7xyky0" target="_blank">
         <span class="writing-title">Using Python to Protect Voting Rights</span>
@@ -858,7 +860,7 @@ section {
           <span class="writing-date">2022</span>
         </span>
       </a>
-
+ 
       <!-- Placeholder for future posts -->
       <div class="writing-item fade-in" style="opacity:0.3;cursor:default;">
         <span class="writing-title">[ Your next essay or note goes here ]</span>
@@ -867,18 +869,18 @@ section {
           <span class="writing-date">—</span>
         </span>
       </div>
-
+ 
     </div>
   </section>
-
+ 
   <!-- RESUME -->
   <section id="resume">
     <p class="section-eyebrow fade-in">experience</p>
     <h2 class="section-title fade-in">Resume.</h2>
-
+ 
     <div class="resume-section fade-in">
       <h3>Experience</h3>
-
+ 
       <div class="resume-item">
         <div>
           <div class="resume-role">Data Strategy & Modeling Lead</div>
@@ -892,7 +894,7 @@ section {
           <li>Created an API suite for seamless data flow between disparate internal platforms</li>
         </ul>
       </div>
-
+ 
       <div class="resume-item">
         <div>
           <div class="resume-role">Data Analyst · Cloud Risk Reporting</div>
@@ -905,7 +907,7 @@ section {
           <li>Designed multi-stage data flow integrating scraped content with Vertex AI for automated insight generation</li>
         </ul>
       </div>
-
+ 
       <div class="resume-item">
         <div>
           <div class="resume-role">Research Analyst</div>
@@ -919,7 +921,7 @@ section {
         </ul>
       </div>
     </div>
-
+ 
     <div class="resume-section fade-in">
       <h3>Education</h3>
       <div class="resume-item">
@@ -937,7 +939,7 @@ section {
         <div class="resume-date">2016–2020</div>
       </div>
     </div>
-
+ 
     <div class="resume-section fade-in">
       <h3>Technical Skills</h3>
       <div class="skills-row">
@@ -952,71 +954,71 @@ section {
         <span class="skill-chip">Scikit-Learn</span><span class="skill-chip">TensorFlow</span>
       </div>
     </div>
-
+ 
     <div style="margin-top:32px" class="fade-in">
       <a href="ChanelRichardsonResume.pdf" class="btn btn-primary" target="_blank">Download full PDF</a>
     </div>
   </section>
-
+ 
 </main>
 </div>
-
+ 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 // ── Custom cursor ────────────────────────────────────────────────────────────
 const cursor = document.getElementById('cursor');
 const trail = document.getElementById('cursorTrail');
 let mx = 0, my = 0, tx = 0, ty = 0;
-
+ 
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
   cursor.style.left = (mx - 6) + 'px';
   cursor.style.top  = (my - 6) + 'px';
 });
-
+ 
 setInterval(() => {
   tx += (mx - tx) * 0.2;
   ty += (my - ty) * 0.2;
   trail.style.left = (tx - 16) + 'px';
   trail.style.top  = (ty - 16) + 'px';
 }, 16);
-
+ 
 // ── Three.js blob background ─────────────────────────────────────────────────
 const canvas = document.getElementById('bg-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.setSize(window.innerWidth, window.innerHeight);
-
+ 
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
 camera.position.z = 5;
-
+ 
 // Blob geometry - icosahedron subdivided
 const geo = new THREE.IcosahedronGeometry(1.8, 6);
 const positions = geo.attributes.position;
 const originalPos = new Float32Array(positions.array);
-
+ 
 // Color blobs
 const colors = [
   { r: 0.0, g: 0.9, b: 0.7 },  // teal
   { r: 0.78, g: 0.49, b: 1.0 }, // purple
   { r: 0.5, g: 1.0, b: 0.43 },  // green
 ];
-
+ 
 // Multiple blobs
 const blobs = [];
 colors.forEach((col, i) => {
   const bGeo = new THREE.IcosahedronGeometry(1.0 + i * 0.3, 5);
   const bPos = bGeo.attributes.position;
   const bOrig = new Float32Array(bPos.array);
-
+ 
   const mat = new THREE.MeshBasicMaterial({
     color: new THREE.Color(col.r, col.g, col.b),
     wireframe: true,
     transparent: true,
     opacity: 0.08 + i * 0.03,
   });
-
+ 
   const mesh = new THREE.Mesh(bGeo, mat);
   mesh.position.set(
     (Math.random() - 0.5) * 4,
@@ -1026,7 +1028,7 @@ colors.forEach((col, i) => {
   scene.add(mesh);
   blobs.push({ mesh, geo: bGeo, orig: bOrig, speed: 0.3 + i * 0.15, phase: i * 2.1 });
 });
-
+ 
 // Solid glow blob in center
 const mainGeo = new THREE.IcosahedronGeometry(1.6, 6);
 const mainOrig = new Float32Array(mainGeo.attributes.position.array);
@@ -1038,7 +1040,7 @@ const mainMat = new THREE.MeshBasicMaterial({
 });
 const mainMesh = new THREE.Mesh(mainGeo, mainMat);
 scene.add(mainMesh);
-
+ 
 // Wireframe over solid
 const wireMat = new THREE.MeshBasicMaterial({
   color: new THREE.Color(0, 0.9, 0.7),
@@ -1048,7 +1050,7 @@ const wireMat = new THREE.MeshBasicMaterial({
 });
 const wireMesh = new THREE.Mesh(mainGeo, wireMat);
 scene.add(wireMesh);
-
+ 
 function morphBlob(geo, orig, t, strength, freq) {
   const pos = geo.attributes.position;
   for (let i = 0; i < pos.count; i++) {
@@ -1064,16 +1066,16 @@ function morphBlob(geo, orig, t, strength, freq) {
   }
   pos.needsUpdate = true;
 }
-
+ 
 let t = 0;
 function animate() {
   requestAnimationFrame(animate);
   t += 0.008;
-
+ 
   // Morph main blob
   morphBlob(mainGeo, mainOrig, t, 0.35, 2.5);
   mainGeo.computeVertexNormals();
-
+ 
   // Morph each satellite blob
   blobs.forEach((b, i) => {
     morphBlob(b.geo, b.orig, t * b.speed + b.phase, 0.4 + i * 0.1, 2.0 + i * 0.5);
@@ -1083,26 +1085,26 @@ function animate() {
     b.mesh.position.x = Math.sin(t * 0.2 + b.phase) * (1.5 + i * 0.5);
     b.mesh.position.y = Math.cos(t * 0.17 + b.phase) * (1.0 + i * 0.3);
   });
-
+ 
   mainMesh.rotation.x = t * 0.05;
   mainMesh.rotation.y = t * 0.08;
   wireMesh.rotation.x = t * 0.05;
   wireMesh.rotation.y = t * 0.08;
-
+ 
   renderer.render(scene, camera);
 }
 animate();
-
+ 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
-
+ 
 // ── Scroll-based nav highlighting ────────────────────────────────────────────
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('nav a');
-
+ 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -1112,9 +1114,9 @@ const observer = new IntersectionObserver(entries => {
     }
   });
 }, { threshold: 0.3 });
-
+ 
 sections.forEach(s => observer.observe(s));
-
+ 
 // ── Fade-in on scroll ────────────────────────────────────────────────────────
 const fadeEls = document.querySelectorAll('.fade-in');
 const fadeObs = new IntersectionObserver(entries => {
@@ -1126,6 +1128,36 @@ const fadeObs = new IntersectionObserver(entries => {
 }, { threshold: 0.1 });
 fadeEls.forEach(el => fadeObs.observe(el));
 </script>
-
+ 
 </body>
 </html>
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
