@@ -1,41 +1,1131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chanel Richardson</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'BrokenConsole';
+  src: url('BrokenconsoleBold.otf') format('opentype');
+  font-weight: bold;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #080b0a;
+  --surface: #0e1412;
+  --surface2: #141c1a;
+  --border: #1e2e29;
+  --teal: #00e5b4;
+  --teal-dim: #00b08a;
+  --teal-glow: #00e5b420;
+  --green: #7fff6e;
+  --purple: #c77dff;
+  --amber: #ffb347;
+  --text: #e8f0ee;
+  --muted: #5a7a72;
+  --hint: #2a3d38;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--teal);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: screen;
+}
+.cursor-trail {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid var(--teal-dim);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.08s ease;
+  opacity: 0.5;
+}
+
+/* Three.js canvas */
+#bg-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  opacity: 0.55;
+}
+
+/* Layout */
+.site-wrap {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar nav */
+.sidebar {
+  position: fixed;
+  width: 240px;
+  height: 100vh;
+  padding: 40px 24px;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--border);
+  background: rgba(8,11,10,0.7);
+  backdrop-filter: blur(12px);
+  z-index: 10;
+}
+
+.sidebar-name {
+  font-family: 'BrokenConsole', monospace;
+  font-size: 19px;
+  color: var(--teal);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.sidebar-title {
+  font-size: 10px;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  font-style: italic;
+}
+
+nav { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 6px;
+  transition: all 0.15s;
+  border: 1px solid transparent;
+}
+nav a:hover, nav a.active {
+  color: var(--teal);
+  background: var(--teal-glow);
+  border-color: var(--border);
+}
+nav a .nav-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+.sidebar-foot {
+  font-size: 10px;
+  color: var(--hint);
+  line-height: 2;
+}
+.sidebar-foot a {
+  color: var(--muted);
+  text-decoration: none;
+  display: block;
+  transition: color 0.15s;
+}
+.sidebar-foot a:hover { color: var(--teal); }
+
+/* Main content */
+.main {
+  margin-left: 240px;
+  padding: 0;
+}
+
+/* Sections */
+section {
+  min-height: 100vh;
+  padding: 80px 60px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+  font-style: italic;
+}
+
+.section-title {
+  font-family: 'BrokenConsole', monospace;
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 40px;
+  color: var(--text);
+}
+
+/* Hero section */
+#home {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 60px;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.hero-content {}
+
+.hero-tagline {
+  font-family: 'BrokenConsole', monospace;
+  font-size: clamp(42px, 6vw, 80px);
+  line-height: 1.0;
+  margin-bottom: 28px;
+  color: var(--text);
+}
+.hero-tagline .accent { color: var(--teal); }
+.hero-tagline .accent2 { color: var(--purple); }
+
+.hero-bio {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--muted);
+  max-width: 520px;
+  margin-bottom: 32px;
+}
+
+.interests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 40px;
+}
+.interest-tag {
+  font-size: 11px;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+.interest-tag:hover {
+  border-color: var(--teal-dim);
+  color: var(--teal);
+}
+
+.hero-links { display: flex; gap: 12px; }
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.15s;
+  cursor: none;
+}
+.btn-primary {
+  background: var(--teal);
+  color: var(--bg);
+  font-weight: 500;
+}
+.btn-primary:hover { background: var(--teal-dim); }
+.btn-ghost {
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+.btn-ghost:hover { border-color: var(--teal-dim); color: var(--teal); }
+
+.hero-img-wrap {
+  position: relative;
+}
+.hero-img-wrap img {
+  width: 100%;
+  border-radius: 16px;
+  display: block;
+  filter: saturate(0.7) contrast(1.1);
+  mix-blend-mode: luminosity;
+  opacity: 0.85;
+}
+.hero-img-frame {
+  position: absolute;
+  inset: -8px;
+  border: 1px solid var(--teal-dim);
+  border-radius: 20px;
+  opacity: 0.4;
+  pointer-events: none;
+}
+.hero-img-frame2 {
+  position: absolute;
+  inset: -16px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* About section */
+#about {}
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.about-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+}
+.about-block h3 {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+.about-block p {
+  font-size: 13px;
+  line-height: 1.85;
+  color: var(--muted);
+}
+.about-block.full { grid-column: 1 / -1; }
+
+.stack-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.stack-tag {
+  font-size: 11px;
+  padding: 3px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+  transition: all 0.15s;
+}
+.stack-tag:hover { border-color: var(--green); color: var(--green); }
+
+/* Projects */
+#projects {}
+.projects-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.project-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  transition: all 0.2s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.project-card:hover {
+  border-color: var(--teal-dim);
+  transform: translateY(-2px);
+}
+.project-card:hover::before { opacity: 1; }
+
+.project-status {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+.status-live { background: #00e5b420; color: var(--teal); border: 1px solid var(--teal-dim); }
+.status-wip  { background: #ffb34720; color: var(--amber); border: 1px solid #ffb34760; }
+.status-concept { background: #c77dff20; color: var(--purple); border: 1px solid #c77dff60; }
+
+.project-name {
+  font-family: 'BrokenConsole', monospace;
+  font-size: 22px;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+.project-desc {
+  font-size: 13px;
+  line-height: 1.75;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.project-tech span {
+  font-size: 10px;
+  padding: 2px 7px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+.project-card.featured { grid-column: 1 / -1; }
+.project-card.featured .project-name { font-size: 28px; }
+
+/* TouchDesigner section */
+.td-placeholder {
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  margin-top: 20px;
+}
+.td-placeholder p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.8;
+}
+.td-placeholder .td-label {
+  font-family: 'BrokenConsole', monospace;
+  font-size: 18px;
+  color: var(--purple);
+  margin-bottom: 12px;
+}
+
+/* Writings */
+#writings {}
+.writing-add-hint {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 28px;
+  font-style: italic;
+}
+.writing-add-hint code {
+  background: var(--surface2);
+  padding: 2px 6px;
+  border-radius: 3px;
+  color: var(--teal);
+  font-size: 11px;
+}
+.writings-list { display: flex; flex-direction: column; gap: 1px; }
+.writing-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--hint);
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s;
+  gap: 20px;
+}
+.writing-item:hover .writing-title { color: var(--teal); }
+.writing-item:first-child { border-top: 1px solid var(--hint); }
+.writing-title {
+  font-size: 15px;
+  color: var(--text);
+  transition: color 0.15s;
+  flex: 1;
+}
+.writing-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+}
+.writing-type {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.writing-date {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* Resume */
+#resume {}
+.resume-section { margin-bottom: 40px; }
+.resume-section h3 {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  font-style: italic;
+}
+.resume-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+.resume-role {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+}
+.resume-org {
+  font-size: 13px;
+  color: var(--teal-dim);
+  margin-bottom: 8px;
+}
+.resume-date {
+  font-size: 11px;
+  color: var(--muted);
+  font-style: italic;
+  text-align: right;
+  white-space: nowrap;
+}
+.resume-bullets {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  grid-column: 1 / -1;
+}
+.resume-bullets li {
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+  padding-left: 16px;
+  position: relative;
+}
+.resume-bullets li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--teal);
+  font-size: 10px;
+}
+.skills-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.skill-chip {
+  font-size: 11px;
+  padding: 4px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--muted);
+}
+
+/* Talks section */
+.talks-list { display: flex; flex-direction: column; gap: 12px; }
+.talk-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 16px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s;
+}
+.talk-item:hover { border-color: var(--teal-dim); }
+.talk-year {
+  font-size: 11px;
+  color: var(--teal);
+  font-style: italic;
+  flex-shrink: 0;
+  margin-top: 2px;
+  width: 36px;
+}
+.talk-title { font-size: 13px; color: var(--text); margin-bottom: 4px; }
+.talk-venue { font-size: 11px; color: var(--muted); }
+
+/* Scanline effect */
+.scanline {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.4;
+}
+
+/* Scroll fade-in */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1000px) {
+  .site-wrap { grid-template-columns: 1fr; }
+  .sidebar { position: relative; width: 100%; height: auto; }
+  .main { margin-left: 0; }
+  section { padding: 60px 24px; }
+  #home { grid-template-columns: 1fr; }
+  .hero-img-wrap { display: none; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .about-grid { grid-template-columns: 1fr; }
+}
+</style>
 </head>
 <body>
-  <ul>
-  <li><a href="index.html">Home</a></li>
-  <li><a href="ChanelRichardsonResume.pdf">Resume</a></li>
-  <li><a href="projects.html">My work</a></li>
-  </ul>
-  <hr></hr>
-<div class = "container">
 
-<h1 class="title">
-  <span class ="title-word title-word-1">Chanel Richardson</span>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-trail" id="cursorTrail"></div>
+<div class="scanline"></div>
+<canvas id="bg-canvas"></canvas>
 
-</h1>
+<div class="site-wrap">
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-name">Chanel<br>Richardson</div>
+  <div class="sidebar-title">Data Strategist · Builder</div>
+  <nav>
+    <a href="#home" class="active"><span class="nav-dot"></span>Home</a>
+    <a href="#about"><span class="nav-dot"></span>About</a>
+    <a href="#projects"><span class="nav-dot"></span>Projects</a>
+    <a href="#visuals"><span class="nav-dot"></span>Visuals</a>
+    <a href="#writings"><span class="nav-dot"></span>Writings</a>
+    <a href="#resume"><span class="nav-dot"></span>Resume</a>
+  </nav>
+  <div class="sidebar-foot">
+    <a href="mailto:crichardson1399@gmail.com">crichardson1399@gmail.com</a>
+    <a href="https://github.com/chanelrichardson" target="_blank">github.com/chanelrichardson</a>
+    <a href="https://www.linkedin.com/in/chanelrichardson" target="_blank">linkedin</a>
+    <br>
+    <span style="color:var(--hint)">Washington, DC</span>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main">
+
+  <!-- HOME -->
+  <section id="home">
+    <div class="hero-content">
+      <p class="section-eyebrow">data strategist · builder · experimenter</p>
+      <h1 class="hero-tagline">
+        Making data<br>
+        <span class="accent">legible</span><br>
+        for people<br>
+        who <span class="accent2">matter.</span>
+      </h1>
+      <p class="hero-bio">
+        I build data platforms, risk frameworks, and civic tools at the intersection of technical rigor and human impact. Currently leading data strategy for Google Cloud Risk & Compliance. In my spare time: live coding, synths, hydroponics, terrariums, and community tech.
+      </p>
+      <div class="interests">
+        <span class="interest-tag">Live Coding</span>
+        <span class="interest-tag">Synth Circuits</span>
+        <span class="interest-tag">Hydroponics</span>
+        <span class="interest-tag">Terrariums</span>
+        <span class="interest-tag">Civic Tech DC</span>
+        <span class="interest-tag">TouchDesigner</span>
+        <span class="interest-tag">Cooking</span>
+      </div>
+      <div class="hero-links">
+        <a href="#projects" class="btn btn-primary">View work</a>
+        <a href="ChanelRichardsonResume.pdf" class="btn btn-ghost" target="_blank">Resume PDF</a>
+      </div>
+    </div>
+    <div class="hero-img-wrap">
+      <img src="chanelrichardson.png" alt="Chanel Richardson">
+      <div class="hero-img-frame"></div>
+      <div class="hero-img-frame2"></div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <p class="section-eyebrow fade-in">background</p>
+    <h2 class="section-title fade-in">Who I am.</h2>
+    <div class="about-grid">
+      <div class="about-block fade-in">
+        <h3>Currently</h3>
+        <p>Data Strategy & Modeling Lead at Google Cloud Risk & Compliance. I define what data we use and how — architecting platforms that bring seven years of compliance data into a unified model, and building agentic AI workflows that help non-technical folks achieve data-driven governance.</p>
+      </div>
+      <div class="about-block fade-in">
+        <h3>Previously</h3>
+        <p>Research Analyst at the Metric Geometry and Gerrymandering Group (MGGG), where I built computational tools for redistricting litigation across eight states. My analyses helped protect voting rights in real court cases.</p>
+      </div>
+      <div class="about-block fade-in">
+        <h3>Community</h3>
+        <p>Active contributor to Civic Tech DC, where I lead web scraping architecture for Court Scraper — aggregating housing court dockets to help canvassers reach tenants before eviction. Part of the Stomp Out Slumlords network.</p>
+      </div>
+      <div class="about-block fade-in">
+        <h3>Stack</h3>
+        <div class="stack-tags">
+          <span class="stack-tag">Python</span><span class="stack-tag">TypeScript</span>
+          <span class="stack-tag">GCP</span><span class="stack-tag">BigQuery</span>
+          <span class="stack-tag">Vertex AI</span><span class="stack-tag">SQL</span>
+          <span class="stack-tag">Rust</span><span class="stack-tag">Docker</span>
+          <span class="stack-tag">Airflow</span><span class="stack-tag">Looker</span>
+          <span class="stack-tag">Three.js</span><span class="stack-tag">Strudel</span>
+          <span class="stack-tag">Hydra</span><span class="stack-tag">TouchDesigner</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <p class="section-eyebrow fade-in">work</p>
+    <h2 class="section-title fade-in">Projects.</h2>
+    <div class="projects-grid">
+
+      <!-- Featured: Job Agent -->
+      <div class="project-card featured fade-in">
+        <span class="project-status status-live">Live</span>
+        <div class="project-name">Job Search Agent</div>
+        <p class="project-desc">
+          A fully automated, multi-user job search pipeline. Users sign up via a hosted web form, upload their resume and cover letters, describe what they want in plain English — and receive a weekly email digest with matched roles, AI-tailored cover letters, and pre-filled application answers. Runs on GitHub Actions with zero hosting cost. Supports multiple users simultaneously, each with private encrypted profiles.
+        </p>
+        <div class="project-tech">
+          <span>Python</span><span>Claude API</span><span>GitHub Actions</span>
+          <span>Vercel</span><span>Node.js</span><span>Gmail SMTP</span>
+        </div>
+      </div>
+
+      <!-- Court Scraper -->
+      <div class="project-card fade-in">
+        <span class="project-status status-wip">In Progress</span>
+        <div class="project-name">Court Scraper</div>
+        <p class="project-desc">
+          Web scraping architecture for Civic Tech DC's housing justice initiative. Aggregates upcoming eviction case dockets in DC and Maryland, producing walk sheets for Stomp Out Slumlords canvassers to reach tenants before they're displaced.
+        </p>
+        <div class="project-tech">
+          <span>JavaScript</span><span>Puppeteer</span><span>AWS</span><span>Civic Tech DC</span>
+        </div>
+      </div>
+
+      <!-- Housing Re-Entry -->
+      <div class="project-card fade-in">
+        <span class="project-status status-wip">Early Stage</span>
+        <div class="project-name">Housing Re-Entry Platform</div>
+        <p class="project-desc">
+          A platform to support people navigating housing instability after incarceration. Still in early design and research — focused on surfacing resources, rights, and pathways for people who face compounding barriers in the housing market.
+        </p>
+        <div class="project-tech">
+          <span>TBD</span><span>Early Stage</span>
+        </div>
+      </div>
+
+      <!-- Algocade -->
+      <div class="project-card fade-in">
+        <span class="project-status status-concept">In Development</span>
+        <div class="project-name">Algocade</div>
+        <p class="project-desc">
+          A controller-based live coding game for non-technical people interested in algorithmic art. Uses Strudel + Hydra to let players generate music and visuals through gameplay — lowering the barrier to a medium that's been too code-centric.
+        </p>
+        <div class="project-tech">
+          <span>Strudel</span><span>Hydra</span><span>Live Coding</span><span>Web Audio API</span>
+        </div>
+      </div>
+
+      <!-- GerryTools -->
+      <div class="project-card fade-in">
+        <a href="https://github.com/mggg/evaltools" target="_blank" style="text-decoration:none;color:inherit;display:block;">
+        <span class="project-status status-live">Published</span>
+        <div class="project-name">GerryTools</div>
+        <p class="project-desc">
+          Open-source Python library for redistricting analysis. Computes partisan scores, demographic metrics, and compactness scores. Used by litigation teams, researchers, and the redistricting community. Contributed methods and internal tooling during my time at MGGG.
+        </p>
+        <div class="project-tech">
+          <span>Python</span><span>GIS</span><span>Open Source</span><span>MGGG</span>
+        </div>
+        </a>
+      </div>
+
+      <!-- Jackson TN -->
+      <div class="project-card fade-in">
+        <span class="project-status status-live">Shipped</span>
+        <div class="project-name">Jackson, TN City Council Maps</div>
+        <p class="project-desc">
+          Analyzed and presented alternative district maps for Jackson, TN's city council — a majority-Black city whose proposed map had only 3 of 9 majority-Black districts despite a 43% Black population. The new map was accepted on the spot.
+        </p>
+        <div class="project-tech">
+          <span>Python</span><span>GIS</span><span>Redistricting</span><span>Voting Rights</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- VISUALS / TOUCHDESIGNER -->
+  <section id="visuals">
+    <p class="section-eyebrow fade-in">generative work</p>
+    <h2 class="section-title fade-in">Visuals.</h2>
+    <p style="color:var(--muted);font-size:13px;line-height:1.8;max-width:540px;margin-bottom:32px" class="fade-in">
+      I work with TouchDesigner, Hydra, and Three.js to generate visuals — sometimes live, sometimes as standalone pieces. More coming here soon.
+    </p>
+    <div class="td-placeholder fade-in">
+      <div class="td-label">[ TouchDesigner files — coming soon ]</div>
+      <p>Drop .toe files, renders, or video links here.<br>
+      Each piece gets a card with a preview, title, and description.</p>
+    </div>
+  </section>
+
+  <!-- WRITINGS -->
+  <section id="writings">
+    <p class="section-eyebrow fade-in">words</p>
+    <h2 class="section-title fade-in">Writings.</h2>
+    <div class="writing-add-hint fade-in">
+      To add an entry: duplicate a <code>&lt;a class="writing-item"&gt;</code> block below and update the title, type, date, and href. That's it.
+    </div>
+    <div class="writings-list">
+
+      <!-- TALKS (included here as "writings") -->
+      <a class="writing-item fade-in" href="https://www.youtube.com/watch?v=wGs_o7xyky0" target="_blank">
+        <span class="writing-title">Using Python to Protect Voting Rights</span>
+        <span class="writing-meta">
+          <span class="writing-type">Talk · SciPy</span>
+          <span class="writing-date">July 2022</span>
+        </span>
+      </a>
+      <a class="writing-item fade-in" href="#" target="_blank">
+        <span class="writing-title">Graphs, Stats, and Math Take the Stand: The Role of Mathematics in Redistricting Litigation</span>
+        <span class="writing-meta">
+          <span class="writing-type">Talk · Brown University</span>
+          <span class="writing-date">Oct 2022</span>
+        </span>
+      </a>
+      <a class="writing-item fade-in" href="#" target="_blank">
+        <span class="writing-title">Ecological Inference & Voting Rights</span>
+        <span class="writing-meta">
+          <span class="writing-type">Talk · Joint Math Meetings</span>
+          <span class="writing-date">Jan 2023</span>
+        </span>
+      </a>
+      <a class="writing-item fade-in" href="#" target="_blank">
+        <span class="writing-title">Aggregating Community Maps</span>
+        <span class="writing-meta">
+          <span class="writing-type">Paper · SIGSPATIAL '22</span>
+          <span class="writing-date">2022</span>
+        </span>
+      </a>
+
+      <!-- Placeholder for future posts -->
+      <div class="writing-item fade-in" style="opacity:0.3;cursor:default;">
+        <span class="writing-title">[ Your next essay or note goes here ]</span>
+        <span class="writing-meta">
+          <span class="writing-type">Essay</span>
+          <span class="writing-date">—</span>
+        </span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RESUME -->
+  <section id="resume">
+    <p class="section-eyebrow fade-in">experience</p>
+    <h2 class="section-title fade-in">Resume.</h2>
+
+    <div class="resume-section fade-in">
+      <h3>Experience</h3>
+
+      <div class="resume-item">
+        <div>
+          <div class="resume-role">Data Strategy & Modeling Lead</div>
+          <div class="resume-org">Google Cloud · Risk & Compliance</div>
+        </div>
+        <div class="resume-date">Oct 2025 – Present</div>
+        <ul class="resume-bullets">
+          <li>Lead data strategy for Cloud Risk & Compliance, architecting "OneGRC" — a unified data model centralizing seven years of compliance data across platforms</li>
+          <li>Bridge between legal/regulatory leads and engineering, ensuring technical roadmaps align with evolving mandates</li>
+          <li>Built agentic AI workflows enabling non-technical users to achieve automated governance, risk, and compliance outcomes</li>
+          <li>Created an API suite for seamless data flow between disparate internal platforms</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div>
+          <div class="resume-role">Data Analyst · Cloud Risk Reporting</div>
+          <div class="resume-org">Google Cloud</div>
+        </div>
+        <div class="resume-date">Jun 2023 – Oct 2025</div>
+        <ul class="resume-bullets">
+          <li>Led "Risk Reporting 2.0" — transitioning from reactive reporting to proactive, historical analysis methodology</li>
+          <li>Architected Looker dashboards centralizing KRIs across domains for real-time executive visibility</li>
+          <li>Designed multi-stage data flow integrating scraped content with Vertex AI for automated insight generation</li>
+        </ul>
+      </div>
+
+      <div class="resume-item">
+        <div>
+          <div class="resume-role">Research Analyst</div>
+          <div class="resume-org">Metric Geometry & Gerrymandering Group (MGGG)</div>
+        </div>
+        <div class="resume-date">Aug 2021 – May 2023</div>
+        <ul class="resume-bullets">
+          <li>Co-authored gerrytools — open-source Python library used by redistricting community and litigation teams</li>
+          <li>Analyzed voter files from TX and NC using ecological inference to determine statistically probable voting outcomes</li>
+          <li>Developed computational analyses supporting litigation across eight states; presented findings to expert witnesses and lawyers</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resume-section fade-in">
+      <h3>Education</h3>
+      <div class="resume-item">
+        <div>
+          <div class="resume-role">M.S. Electrical Engineering</div>
+          <div class="resume-org">Duke University</div>
+        </div>
+        <div class="resume-date">2020–2021</div>
+      </div>
+      <div class="resume-item">
+        <div>
+          <div class="resume-role">B.S. Computer Engineering</div>
+          <div class="resume-org">Tufts University</div>
+        </div>
+        <div class="resume-date">2016–2020</div>
+      </div>
+    </div>
+
+    <div class="resume-section fade-in">
+      <h3>Technical Skills</h3>
+      <div class="skills-row">
+        <span class="skill-chip">Python</span><span class="skill-chip">TypeScript</span>
+        <span class="skill-chip">Rust</span><span class="skill-chip">SQL</span>
+        <span class="skill-chip">JavaScript</span><span class="skill-chip">GCP</span>
+        <span class="skill-chip">BigQuery</span><span class="skill-chip">Vertex AI</span>
+        <span class="skill-chip">Apache Airflow</span><span class="skill-chip">Docker</span>
+        <span class="skill-chip">Looker</span><span class="skill-chip">AWS</span>
+        <span class="skill-chip">LLMs / SLMs</span><span class="skill-chip">BERT</span>
+        <span class="skill-chip">Pandas</span><span class="skill-chip">GeoPandas</span>
+        <span class="skill-chip">Scikit-Learn</span><span class="skill-chip">TensorFlow</span>
+      </div>
+    </div>
+
+    <div style="margin-top:32px" class="fade-in">
+      <a href="ChanelRichardsonResume.pdf" class="btn btn-primary" target="_blank">Download full PDF</a>
+    </div>
+  </section>
+
+</main>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ── Custom cursor ────────────────────────────────────────────────────────────
+const cursor = document.getElementById('cursor');
+const trail = document.getElementById('cursorTrail');
+let mx = 0, my = 0, tx = 0, ty = 0;
 
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = (mx - 6) + 'px';
+  cursor.style.top  = (my - 6) + 'px';
+});
 
-<div class="square">
+setInterval(() => {
+  tx += (mx - tx) * 0.2;
+  ty += (my - ty) * 0.2;
+  trail.style.left = (tx - 16) + 'px';
+  trail.style.top  = (ty - 16) + 'px';
+}, 16);
 
-<img src="chanelrichardson.png" alt="Chanel in Paris">
-<div class="header-about">
+// ── Three.js blob background ─────────────────────────────────────────────────
+const canvas = document.getElementById('bg-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-<p>Chanel Richardson is currently a research analyst and software developer at the Metric Geometry and Gerrymandering Group (<a href="https://mggg.org">MGGG</a>) that's part of the Tisch College of Civic Life at Tufts University. Chanel's work centers around analysis used in redistricting litigation, data infrastructure development, and researching topics related to redistricting and voting rights. She graduated from Tufts University with her Bachelor of Science in Computer Engineering in 2020 and Duke University with her Master of Science in Electrical Engineering in December 2021.
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 5;
 
-Chanel is still trying to figure out the boundary between learning and doing. Currently, her time is spent consuming information related to tech, data privacy, politics, gaming, and social media. In the near future, she'll start implementing projects related to these topics. She's also an avid reader of science fiction and speculative fiction.
+// Blob geometry - icosahedron subdivided
+const geo = new THREE.IcosahedronGeometry(1.8, 6);
+const positions = geo.attributes.position;
+const originalPos = new Float32Array(positions.array);
 
-That's all to say, Chanel is still figuring things out, and she's open to the many possibilities ahead of her in life.</p>
-</div>
+// Color blobs
+const colors = [
+  { r: 0.0, g: 0.9, b: 0.7 },  // teal
+  { r: 0.78, g: 0.49, b: 1.0 }, // purple
+  { r: 0.5, g: 1.0, b: 0.43 },  // green
+];
 
-</div>
+// Multiple blobs
+const blobs = [];
+colors.forEach((col, i) => {
+  const bGeo = new THREE.IcosahedronGeometry(1.0 + i * 0.3, 5);
+  const bPos = bGeo.attributes.position;
+  const bOrig = new Float32Array(bPos.array);
 
+  const mat = new THREE.MeshBasicMaterial({
+    color: new THREE.Color(col.r, col.g, col.b),
+    wireframe: true,
+    transparent: true,
+    opacity: 0.08 + i * 0.03,
+  });
+
+  const mesh = new THREE.Mesh(bGeo, mat);
+  mesh.position.set(
+    (Math.random() - 0.5) * 4,
+    (Math.random() - 0.5) * 3,
+    (Math.random() - 0.5) * 2
+  );
+  scene.add(mesh);
+  blobs.push({ mesh, geo: bGeo, orig: bOrig, speed: 0.3 + i * 0.15, phase: i * 2.1 });
+});
+
+// Solid glow blob in center
+const mainGeo = new THREE.IcosahedronGeometry(1.6, 6);
+const mainOrig = new Float32Array(mainGeo.attributes.position.array);
+const mainMat = new THREE.MeshBasicMaterial({
+  color: new THREE.Color(0, 0.9, 0.7),
+  wireframe: false,
+  transparent: true,
+  opacity: 0.04,
+});
+const mainMesh = new THREE.Mesh(mainGeo, mainMat);
+scene.add(mainMesh);
+
+// Wireframe over solid
+const wireMat = new THREE.MeshBasicMaterial({
+  color: new THREE.Color(0, 0.9, 0.7),
+  wireframe: true,
+  transparent: true,
+  opacity: 0.12,
+});
+const wireMesh = new THREE.Mesh(mainGeo, wireMat);
+scene.add(wireMesh);
+
+function morphBlob(geo, orig, t, strength, freq) {
+  const pos = geo.attributes.position;
+  for (let i = 0; i < pos.count; i++) {
+    const ix = i * 3;
+    const x = orig[ix], y = orig[ix+1], z = orig[ix+2];
+    const len = Math.sqrt(x*x + y*y + z*z);
+    const nx = x / len, ny = y / len, nz = z / len;
+    const noise = Math.sin(nx * freq + t) * Math.cos(ny * freq + t * 0.7) * Math.sin(nz * freq + t * 1.3);
+    const disp = 1 + noise * strength;
+    pos.array[ix]   = nx * len * disp;
+    pos.array[ix+1] = ny * len * disp;
+    pos.array[ix+2] = nz * len * disp;
+  }
+  pos.needsUpdate = true;
+}
+
+let t = 0;
+function animate() {
+  requestAnimationFrame(animate);
+  t += 0.008;
+
+  // Morph main blob
+  morphBlob(mainGeo, mainOrig, t, 0.35, 2.5);
+  mainGeo.computeVertexNormals();
+
+  // Morph each satellite blob
+  blobs.forEach((b, i) => {
+    morphBlob(b.geo, b.orig, t * b.speed + b.phase, 0.4 + i * 0.1, 2.0 + i * 0.5);
+    b.geo.computeVertexNormals();
+    b.mesh.rotation.x = t * 0.1 * (i % 2 ? 1 : -1);
+    b.mesh.rotation.y = t * 0.13;
+    b.mesh.position.x = Math.sin(t * 0.2 + b.phase) * (1.5 + i * 0.5);
+    b.mesh.position.y = Math.cos(t * 0.17 + b.phase) * (1.0 + i * 0.3);
+  });
+
+  mainMesh.rotation.x = t * 0.05;
+  mainMesh.rotation.y = t * 0.08;
+  wireMesh.rotation.x = t * 0.05;
+  wireMesh.rotation.y = t * 0.08;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ── Scroll-based nav highlighting ────────────────────────────────────────────
+const sections = document.querySelectorAll('section');
+const navLinks = document.querySelectorAll('nav a');
+
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const active = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => observer.observe(s));
+
+// ── Fade-in on scroll ────────────────────────────────────────────────────────
+const fadeEls = document.querySelectorAll('.fade-in');
+const fadeObs = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.1 });
+fadeEls.forEach(el => fadeObs.observe(el));
+</script>
 
 </body>
-
-<html>
+</html>
